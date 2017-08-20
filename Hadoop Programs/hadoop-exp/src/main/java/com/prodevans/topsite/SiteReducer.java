@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -45,6 +43,7 @@ public class SiteReducer extends Reducer<Text, IntWritable, Text, Text> {
 		Collections.sort(ar, Collections.reverseOrder());
 		
 		for(Integer in : ar) {
+			
 			context.write(new Text(in.toString()),new Text(map.get(in)));
 		}
 		

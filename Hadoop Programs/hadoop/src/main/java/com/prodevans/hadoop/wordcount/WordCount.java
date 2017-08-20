@@ -63,7 +63,9 @@ public class WordCount {
 		FileSystem fs = FileSystem.get(conf);
 		Path rawfilepath = new Path(args[0]);
 		Path mapperOutFilePath = new Path(args[1]);
-
+		if (fs.exists(mapperOutFilePath)) {
+			fs.delete(mapperOutFilePath);
+		}
 		FileInputFormat.addInputPath(job, rawfilepath);
 		FileOutputFormat.setOutputPath(job, mapperOutFilePath);
 

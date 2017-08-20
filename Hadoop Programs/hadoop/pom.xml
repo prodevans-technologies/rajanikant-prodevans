@@ -5,7 +5,7 @@
 	<groupId>com.prodevans</groupId>
 	<artifactId>hadoop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	
 
 	<name>hadoop</name>
 	<url>http://maven.apache.org</url>
@@ -41,6 +41,12 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.8.2</version>
 		</dependency>
+<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+<dependency>
+    <groupId>commons-logging</groupId>
+    <artifactId>commons-logging</artifactId>
+    <version>1.2</version>
+</dependency>
 
 	</dependencies>
 	<build>
