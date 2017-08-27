@@ -50,6 +50,11 @@ public class WordCount {
 
 	public static void main(String args[]) throws Exception {
 		Configuration conf = new Configuration();
+		
+		conf.set("mappred.max.split.size",args[2].trim());
+		
+		
+		
 		Job job = Job.getInstance(conf, "word count");
 		job.setJarByClass(WordCount.class);
 		job.setMapperClass(TokenizerMapper.class);
@@ -64,7 +69,7 @@ public class WordCount {
 		Path rawfilepath = new Path(args[0]);
 		Path mapperOutFilePath = new Path(args[1]);
 		if (fs.exists(mapperOutFilePath)) {
-			fs.delete(mapperOutFilePath);
+			fs.delete(mapperOutFilePath,true);
 		}
 		FileInputFormat.addInputPath(job, rawfilepath);
 		FileOutputFormat.setOutputPath(job, mapperOutFilePath);

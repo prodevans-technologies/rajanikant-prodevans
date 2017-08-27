@@ -14,7 +14,7 @@ public class MyPartitioner extends Partitioner<MyKey, Text> {
 		} else if (Integer.parseInt(key.getYear().toString()) == 2014) {
 			return 2;
 		} else {
-			return 0;
+			return 3;
 		}
 	}
 

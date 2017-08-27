@@ -23,7 +23,7 @@ public class Main {
 		
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
-		job.setNumReduceTasks(3);
+		job.setNumReduceTasks(1);
 		
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(NullWritable.class);
