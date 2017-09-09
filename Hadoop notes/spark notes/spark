@@ -7,7 +7,7 @@ stages
 
 	stage 1 -- shuffel -- stage 2 -- shuffel -- stage 3
 ---------------------------------------------------------------------------------------
-RDC (resilient and distrubuted dataset):
+RDD (resilient and distrubuted dataset):
 	it partitioned in RAM
 	it collection of the data items splits into partitions and stored in memory on worker of the cluster.
 ---------------------------------------------------------------------------------------
@@ -20,6 +20,22 @@ DAG (directed acyclic graph)
 ---------------------------------------------------------------------------------------
 Cluster manager.
 	YARN --> it is a cluster manager
+	data recides in the worker nodes.
+	the yarn shows where the worker node is present.
+	executer is the process of worker node.
+	one worker node has more executer.
+	one ececuter has more tasks.
+
+Work flow : 
+	driver node --> worker node --> executer --> task;
+---------------------------------------------------------------------------------------
+Executer:
+	it seperate has JVM
+	task share the JVM
+---------------------------------------------------------------------------------------
+
+
+
 
 
 
