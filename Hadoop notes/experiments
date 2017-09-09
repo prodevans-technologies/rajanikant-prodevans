@@ -1,0 +1,48 @@
+1. Find the top3 highest salary in every department.
+	emp_id, emp_name, emp_dept, emp_salary
+	emp001, kumar, JAVA, 20000
+	emp002, avinash, JAVA, 22000
+	emp003, vishal, JAVA, 23000
+	emp004, maruti, JAVA, 24000
+	emp005, kishor, sql, 20000
+	emp006, kailas, sql, 22000
+	emp007, chetan, sql, 23000
+	emp008, vijay, sql, 24000
+
+		 hadoop fs -ls /user/root/ 
+
+		hadoop fs -mkdir -p  /user/rk/mapper/salary/input/
+		hadoop fs -mkdir -p  /user/rk/mapper/salary/output/
+
+		hadoop fs -put emp_record.txt /user/rk/mapper/salary/input/
+
+		hadoop jar salary_hadoop.jar com.prodevans.topsal.SalaryMain /user/root/mapper/salary/input/ /user/rk/mapper/salary/output/
+
+		hadoop fs -cat  /user/rk/mapper/salary/input/*
+
+		hadoop fs -cat  /user/rk/mapper/salary/output/*
+
+2. Search most visited sites using mapperduce.
+	user, Sitename
+	vikas, www.google.com
+	vilas, www.google.com
+	vijay, www.yahoo.in
+	kailas, www.google.com
+	vijay, www.google.com
+	kali, www.google.com
+	anand, www.youtube.com
+	viky, www.youtube.com
+	sidu, www.youtube.com
+
+
+hadoop fs -mkdir -p  /user/root/mapper/site/input/
+hadoop fs -mkdir -p  /user/root/mapper/site/output/
+hadoop fs -put site.txt /user/root/mapper/site/input/
+
+
+hadoop fs -cat  /user/root/mapper/site/input/*
+
+hadoop fs -cat  /user/root/mapper/site/output/*
+
+hadoop jar site_hadoop.jar com.prodevans.topsite.SiteMain /user/root/mapper/site/input/ /user/root/mapper/site/output/
+

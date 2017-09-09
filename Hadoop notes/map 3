@@ -1,0 +1,91 @@
+mapper ->	setup  ---> 1
+			map ---> for each line
+			clean ---> once
+reducer ->	setup  ---> 1
+			reduce ---> for each group
+			clean ---> once
+
+================================
+Mapper Side Join
+================================
+
+emp_id, emp_name, emp_dept, emp_salary
+emp001,kumar,1,20000
+emp002,avinash,1,22000
+emp003,vishal,1,23000
+emp004,maruti,1,24000
+emp005,kishor,2,20000
+emp006,kailas,2,22000
+emp007,chetan,2,23000
+emp008,vijay,2,24000
+
+dept_name, Location
+1,JAVA
+2,sql
+
+hadoop fs -mkdir -p /user/rk/map_join/emp
+hadoop fs -mkdir -p /user/rk/map_join/dept
+hadoop fs -mkdir -p /user/rk/map_join/output
+
+hadoop fs -ls /user/rk/map_join/
+
+hadoop fs -put -f  map_emp.txt /user/rk/map_join/emp/
+
+hadoop fs -put -f  map_dept.txt /user/rk/map_join/dept/
+
+hadoop fs -cat /user/rk/map_join/emp/*
+
+hadoop fs -cat /user/rk/map_join/dept/*
+
+hadoop fs -cat /user/rk/map_join/output/*
+
+hadoop jar map_join.jar com.prodevans.hadoop.map.join.Main /user/rk/map_join/emp/ /user/rk/map_join/output/ /user/rk/map_join/dept/map_dept.txt 
+
+
+
+===========================================
+Combiner program
+===========================================
+- combine the output of the mapper
+- it reduces the network traffic
+- in same node only 
+- same as the combiner class
+- code will be same
+
+===========================================
+Sequence File
+===========================================
+- combine the file in single file
+- thoes in less memory
+- reduce memory westage
+
+===========================================
+record reader
+===========================================
+- read file in new manner
+- send the data to mapper
+
+
+===========================================
+steps
+===========================================
+Input Split
+Record Reader
+Mapper
+	setup
+	map
+	cleanup
+combiner
+partitioner
+reducer
+	setup
+	reduce
+	cleanup
+
+
+
+
+
+
+
+

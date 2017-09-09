@@ -1,0 +1,89 @@
+==============================
+Secondary Sory
+==============================
+
+
+===========
+Input
+===========
+student_roll, student_name, physics, chemistry, maths, standred, yead
+01,rk,70,70,70,8,2016
+02,vip,90,90,90,8,2016
+03,vivek,80,80,80,8,2016
+
+05,vishal,80,80,80,9,2014
+04,vikas,70,70,70,9,2014
+06,anish,90,90,90,9,2014
+
+07,pratik,90,90,90,10,2015
+08,aksha,70,70,70,10,2015
+09,sam,80,80,80,10,2015
+
+
+========
+output
+========
+
+2015,topper
+2015,2nd topper
+2015,3rd topper
+
+===========
+commands
+============
+
+
+hadoop fs -mkdir -p /user/rk/secondarySort/input
+
+hadoop fs -mkdir -p /user/rk/secondarySort/output
+
+hadoop fs -put -f  secondary_sort_data.txt /user/rk/secondarySort/input/
+
+hadoop fs -cat /user/rk/secondarySort/input/*
+
+hadoop fs -cat /user/rk/secondarySort/output/*
+
+hadoop jar secondary_sort.jar com.prodevans.hadoop.secondarysort.MyDriver /user/rk/secondarySort/input/ /user/rk/secondarySort/output/
+
+
+hadoop fs -ls /user/rk/secondarySort/output/*
+hadoop fs -cat /user/rk/secondarySort/output/ErrorRecord-r-00000
+
+
+=========================
+Reducer side JOIN
+=========================
+
+emp_id, emp_name, emp_dept, emp_salary
+emp001,kumar,1,20000
+emp002,avinash,1,22000
+emp003,vishal,1,23000
+emp004,maruti,1,24000
+emp005,kishor,2,20000
+emp006,kailas,2,22000
+emp007,chetan,2,23000
+emp008,vijay,2,24000
+
+dept_name, Location
+1,JAVA
+2,sql
+
+
+
+hadoop fs -mkdir -p /user/rk/join/emp
+hadoop fs -mkdir -p /user/rk/join/dept
+hadoop fs -mkdir -p /user/rk/join/output
+
+hadoop fs -put -f  emp.txt /user/rk/join/emp/
+
+hadoop fs -put -f  dept.txt /user/rk/join/dept/
+
+hadoop fs -cat /user/rk/join/emp/*
+
+hadoop fs -cat /user/rk/join/dept/*
+
+hadoop fs -cat /user/rk/join/output/*
+
+hadoop jar join.jar com.prodevans.hadoop.reducer_join.Main /user/rk/join/emp/ /user/rk/join/dept/ /user/rk/join/output/
+
+

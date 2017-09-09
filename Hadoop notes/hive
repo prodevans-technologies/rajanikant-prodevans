@@ -1,0 +1,275 @@
+=================================================
+Hive Data set
+=================================================
+1,Anne,Admin,1982-02-23,50000,A
+2,Gokul,Admin,1982-02-23,50000,B
+3,Janet,Sales,1982-02-23,60000,A
+4,Hari,Admin,1982-02-23,50000,C
+5,Sanker,Admin,1982-02-23,50000,C
+6,Margaret,Tech,1982-02-23,12000,A
+7,Nirmal,Tech,1982-02-23,12000,B
+8,jinju,Engineer,1982-02-23,45000,B
+9,Nancy,Admin,1982-02-23,50000,A
+10,Andrew,Manager,1982-02-23,40000,A
+11,Arun,Manager,1982-02-23,40000,B
+12,Harish,Sales,1982-02-23,60000,B
+13,Robert,Manager,1982-02-23,40000,A
+14,Laura,Engineer,1982-02-23,45000,A
+15,Anju,Ceo,1982-02-23,100000,B
+16,Aarathi,Manager,1982-02-23,40000,B
+17,Parvathy,Engineer,1982-02-23,45000,B
+18,Gopika,Admin,1982-02-23,50000,B
+19,Steven,Engineer,1982-02-23,45000,A
+20,Michael,Ceo,1982-02-23,100000,A
+
+=================================================
+Hive Querys
+=================================================
+show databases;
+	show the all databases.
+
+drop table <table_name>;
+	delete thedatabase table;
+
+
+create database training_rk;
+	to create database;
+
+use <database_name>
+	to use database;
+	use training_rk;
+
+Show table
+	select * from employees;
+
+================================================
+create table in hive -->
+
+CREATE TABLE IF NOT EXISTS employees
+(
+emp_id int,
+emp_name String,
+emp_dsgntn String,
+emp_doj Date,
+emp_sal int,
+emp_dept String
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+================================================
+--> create the employees.txt file with data.
+
+
+
+
+================================================
+Load data into hive from the local file system
+================================================
+
+LOAD DATA LOCAL INPATH '/root/rk/hive/employees.txt' INTO TABLE employees;
+
+
+
+
+================================================
+Some Query in hive.
+================================================
+
+to verify the input;
+
+select * from employees;
+
+select max(emp_sal) from employees;
+
+select max(emp_sal) from employees group by emp_dsgntn;
+
+select * from employees order by emp_sal desc limit 3;
+
+
+
+================================================
+Execute query for .sh file
+================================================
+
+hive -e "select * from training_rk.employees order by emp_sal desc limit 3;
+";
+
+
+================================================
+Description of the database
+================================================
+desc extended employees;
+
+emp_id              	int                 	                    
+emp_name            	string              	                    
+emp_dsgntn          	string              	                    
+emp_doj             	date                	                    
+emp_sal             	int                 	                    
+emp_dept            	string   
+
+================================================
+Show the internal data file.
+================================================
+/apps/hive/warehouse/training_rk.db/employees --- location of file.
+
+hadoop fs -cat /apps/hive/warehouse/training_rk.db/employees/*
+
+
+
+================================================
+Creating external table and add data
+================================================
+hadoop fs -mkdir -p /user/rk/hive/external_table
+	create table to store data from extenal source;
+
+
+hadoop fs -ls /user/rk/hive/external_table
+
+CREATE EXTERNAL TABLE IF NOT EXISTS employees_ext
+(
+emp_id int,
+emp_name String,
+emp_dsgntn String,
+emp_doj Date,
+emp_sal int,
+emp_dept String
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION '/user/rk/hive/external_table/';
+
+hadoop fs -put employees.txt /user/rk/hive/external_table/
+	--> put data in hadoop
+		you can show data in hive.
+
+
+================================================
+Creating partitional table
+================================================
+CREATE TABLE IF NOT EXISTS employees_part
+(
+emp_id int,
+emp_name String,
+emp_dsgntn String,
+emp_doj Date,
+emp_sal int
+)
+PARTITIONED BY (emp_dept String)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+	partion column must be the last column
+
+
+----------------------------
+load data from static file
+----------------------------
+
+LOAD DATA LOCAL INPATH '/root/rk/hive/employees_d.txt' INTO TABLE employees_part partition (emp_dept = 'D');
+
+
+----------------------------
+load data from dynamic
+----------------------------
+INSERT OVERWRITE TABLE employees_part PARTITION(emp_dept) SELECT * FROM employees;
+
+/apps/hive/warehouse/training_rk.db/employees_part --> location
+
+hadoop fs -ls /apps/hive/warehouse/training_rk.db/employees_part
+
+hadoop fs -cat /apps/hive/warehouse/training_rk.db/employees_part/emp_dept=A
+
+select * from employees_part where emp_dept = 'A'; --> example.
+
+
+================================================
+Creating partitional table
+================================================
+
+
+CREATE TABLE IF NOT EXISTS department
+(
+dept_id String,
+dept_name String
+
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+insert into department values('A', 'JAVA');
+insert into department values('B', 'DB');
+insert into department values('C', 'HADOOP');
+insert into department values('B', 'SOC');
+
+
+--------------
+JOIN Query
+--------------
+select e.*, d.dept_name from employees e INNER JOIN  department d where e.emp_dept = d.dept_id;
+
+------------------------------
+Create Buckate table 
+------------------------------
+CREATE TABLE IF NOT EXISTS employees_buck
+(
+emp_id int,
+emp_name String,
+emp_dsgntn String,
+emp_doj Date,
+emp_sal int
+)
+PARTITIONED BY (emp_dept String)
+CLUSTERED BY(emp_id) INTO 2 BUCKETS
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+------------------------------
+Load data into bucket table 
+------------------------------
+insert overwrite table employees_buck PARTITION(emp_dept) select emp_id, emp_name, emp_dsgntn, emp_doj, emp_sal, emp_dept from employees;
+
+/apps/hive/warehouse/training_rk.db/employees_buck --> result data
+
+hadoop fs -ls /apps/hive/warehouse/training_rk.db/employees_buck/
+
+hadoop fs -ls /apps/hive/warehouse/training_rk.db/employees_buck/emp_dept=A
+
+hadoop fs -cat /apps/hive/warehouse/training_rk.db/employees_buck/emp_dept=A/*
+
+
+------------------------------
+Check specific bucket data. 
+------------------------------
+select * from employees_buck TABLESAMPLE(BUCKET 1 OUT OF 2) limit 5;
+	for first part
+select * from employees_buck TABLESAMPLE(BUCKET 2 OUT OF 2) limit 5;
+	for second part
+
+
+------------------------------
+Create view.
+------------------------------
+create view employee_view as select * from employees_buck where emp_sal > 24000;
+
+
+
+
+================================================
+Add userdefine funcition in HIVE
+================================================
+ADD JAR /root/rk/hive/hive.jar;
+
+CREATE TEMPORARY FUNCTION my_fun as 'hive.FindDepartment';
+
+select emp_id, my_fun(emp_doj) from employees;

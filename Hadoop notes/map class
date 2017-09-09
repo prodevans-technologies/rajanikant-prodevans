@@ -1,0 +1,9 @@
+ hadoop fs -cat  /user/hive/rk/mapperduce/output/j/*
+
+ hadoop jar CharCount.jar com.prodevans.hadoop.wordcount.CharCount /user/hive/rk/mapperduce/input/ /user/hive/rk/mapperduce/output/j/
+
+ hadoop fs -ls  /user/hive/rk/mapperduce/output/*
+
+hadoop fs -put ip.txt  /user/hive/rk/mapperduce/input/
+
+hadoop fs -cat /user/hive/rk/mapperduce/output/k/*

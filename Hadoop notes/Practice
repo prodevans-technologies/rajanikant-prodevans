@@ -1,0 +1,164 @@
+create table employees (emp_id varchar(20) primary key, emp_name varchar(20), dept_name varchar(20), emp_salary double, emp_location varchar(20)); 
+Insert into employees values ('Emp001', 'Anand', 'dept01', 25000, 'Banglore');
+Insert into employees values ('Emp002', 'RK', 'dept01', 25000, 'Banglore');
+Insert into employees values ('Emp003', 'Viky', 'dept02', 25000, 'Banglore');
+Insert into employees values ('Emp004', 'Abhi', 'dept03', 25000, 'Banglore');
+Insert into employees values ('Emp005', 'Vipin', 'dept03', 25000, 'Banglore');
+Insert into employees values ('Emp006', 'RG', 'dept04', 250000, 'Banglore');
+Insert into employees values ('Emp007', 'Varsha', 'dept04', 250000, 'Banglore');
+
+
+create table department (dept_id varchar(20) primary key, dept_name varchar(20));
+Insert into department values ('dept01', 'Hadoop Admin');
+Insert into department values ('dept02', 'Hadoop Dev');
+Insert into department values ('dept03', 'Sys Admin');
+Insert into department values ('dept04', 'NA');
+
+
+create table student(stud_id int primary key, stud_name varchar(20));
+insert into student values(1, 'deepak');
+insert into student values(2, 'suresh');
+insert into student values(3, 'pankaj');
+insert into student values(4, 'ravi');
+
+
+
+=========================================
+Fetch data from the Mysql using sqoop
+==========================================
+sqoop import-all-tables \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--m 1 \
+# It Create the data into the logged in user folder.
+
+=============================================================
+Fetch data from the Mysql using sqoop with specific location
+==============================================================
+sqoop import-all-tables \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--m 1 \
+--warehouse-dir /user/test/exp2  
+# create the data specific directory
+
+===============================================================================
+Fetch data from the Mysql using sqoop with specific location and specific table
+================================================================================
+sqoop import \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--table employees \
+--m 1 \
+--warehouse-dir /user/test/exp2  
+
+
+===============================================================================
+Fetch data from the Mysql using sqoop with Query
+================================================================================
+sqoop import \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--query 'select emp_name, emp_salary from employees where $CONDITIONS' \
+--m 1 \
+--target-dir /user/test/exp2/withQuery  
+
+===============================================================================
+Fetch data from the Mysql using sqoop with Query and condition
+================================================================================
+
+sqoop import \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--query "select emp_name, emp_salary from employees where ( emp_salary > 24000 and emp_dept='dept01' and \$CONDITIONS ) " \
+--m 1 \
+--target-dir /user/test/exp2/withQueryCondition1  
+
+it create the data with specified condition
+
+===============================================================================
+Fetch data from the Mysql using sqoop with Incremental Append
+================================================================================
+sqoop import \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--table student \
+--incremental append \
+--check-column stud_id \
+--last-value 2 \
+--target-dir /user/test/exp2/sqoop_data_incremental_append  
+
+It create data with last updated records.
+
+===============================================================================
+Fetch data from the Mysql using sqoop with File deleminator
+================================================================================
+sqoop import \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--table student \
+--incremental append \
+--check-column stud_id \
+--last-value 2 \
+--target-dir /user/test/exp2/sqoop_data_field_deliminator \
+--fields-terminated-by "|" \
+--lines-terminated-by "\n" \
+--m 2
+terminate fields with specified caharactor.
+
+
+[root@sandbox ~]# hadoop fs -cat /user/test/exp2/sqoop_data_field_deliminator/*
+3|pankaj
+4|ravi
+
+===============================================================================
+Fetch data from the Mysql using sqoop with more mapper classes
+================================================================================
+sqoop import \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--table student \
+--target-dir /user/test/exp2/sqoop_data_field_deliminator \
+--m 2
+
+===============================================================================
+Fetch data from the Mysql using sqoop with Exclude tables
+================================================================================
+sqoop import-all-tables \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--exclude-tables  department \
+--warehouse-dir /user/test/exp2/sqoop_data_exclude_tables \
+--m 1
+
+===============================================================================
+Fetch data from the Mysql using sqoop with Query and JOIN Operation
+================================================================================
+
+sqoop import \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--query "select * from employees natural join department where emp_dept = dept_id and \$CONDITIONS;" \
+--m 1 \
+--target-dir /user/test/exp2/withQueryConditionJoin  
+
+===============================================================================
+Sqoop export (Insert)
+================================================================================
+
+sqoop export \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--table employees \
+--export-dir /user/test/exp2/exportData  
+
+===============================================================================
+Sqoop export (Insert)
+================================================================================
+
+sqoop export \
+--connect "jdbc:mysql://localhost:3306/practice" \
+--username=root \
+--table employees \
+--export-dir /user/test/exp2/exportData  \
+--update-key emp_id

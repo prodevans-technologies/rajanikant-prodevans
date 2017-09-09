@@ -1,0 +1,25 @@
+spark 10 times faster than map reduce
+it is memory execution ( write intermediate result in the RAM)
+we have only task
+	it do map and reduce
+stages
+	shuffelin is perform after the stage
+
+	stage 1 -- shuffel -- stage 2 -- shuffel -- stage 3
+---------------------------------------------------------------------------------------
+RDC (resilient and distrubuted dataset):
+	it partitioned in RAM
+	it collection of the data items splits into partitions and stored in memory on worker of the cluster.
+---------------------------------------------------------------------------------------
+DAG (directed acyclic graph)
+	spark create graph to complete of operation
+	like:
+		start --> add data --> condition --> finish.
+	it used for recumputing the RDD.
+	while the RDD is lost or currepted.
+---------------------------------------------------------------------------------------
+Cluster manager.
+	YARN --> it is a cluster manager
+
+
+
