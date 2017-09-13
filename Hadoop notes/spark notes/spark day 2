@@ -1,0 +1,64 @@
+-------------------------------------
+Data
+-------------------------------------
+EmployeeManager.csv
+E01,RK
+E02,RN
+E03,RD
+E04,RS
+E05,VP
+
+EmployeeName.csv
+E01,anand
+E02,ravi
+E03,subbu
+E04,vishal
+E05,sunny
+
+EmployeeSalary.csv
+E01,50000
+E02,45000
+E03,100000
+E04,45300
+E05,56000
+
+create these 3 files in the input folder.
+
+-------------------------------------
+Data Frame 
+-------------------------------------
+holds the data and scama
+emp_data.csv
+1,Anne,Admin,1982-02-23,50000,A
+2,Gokul,Admin,1982-02-23,50000,B
+3,Janet,Sales,1982-02-23,60000,A
+4,Hari,Admin,1982-02-23,50000,C
+5,Sanker,Admin,1982-02-23,50000,C
+6,Margaret,Tech,1982-02-23,12000,A
+7,Nirmal,Tech,1982-02-23,12000,B
+8,jinju,Engineer,1982-02-23,45000,B
+9,Nancy,Admin,1982-02-23,50000,A
+10,Andrew,Manager,1982-02-23,40000,A
+11,Arun,Manager,1982-02-23,40000,B
+12,Harish,Sales,1982-02-23,60000,B
+13,Robert,Manager,1982-02-23,40000,A
+14,Laura,Engineer,1982-02-23,45000,A
+15,Anju,Ceo,1982-02-23,100000,B
+16,Aarathi,Manager,1982-02-23,40000,B
+17,Parvathy,Engineer,1982-02-23,45000,B
+18,Gopika,Admin,1982-02-23,50000,B
+19,Steven,Engineer,1982-02-23,45000,A
+20,Michael,Ceo,1982-02-23,100000,A
+
+department.csv
+A,Hadooop
+B,JAVA
+C,SCALA
+D,Ruby
+
+-------------------------------------
+Run Spark on hadoop
+-------------------------------------
+spark-submit\
+--class <Class name>
+--
