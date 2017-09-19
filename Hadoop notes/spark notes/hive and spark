@@ -1,0 +1,44 @@
+==================================================================
+Hive and spark Integration
+==================================================================
+- use the old employees database from the hive.
+- import the hive context for the fetch data form hive.
+
+==================================================================
+Run spark program in cluster
+==================================================================
+spark-submit \
+--class hive.SparkHiveIntegration  \
+--num-executors 2 \
+--executor-cores 2 \
+--executor-memory 1g \
+--driver-memory 1g \
+--driver-cores 1 \
+--master yarn-cluster \
+--name "Hortonworks Box Hive-Spark-Integration" \
+--files /etc/hive/conf/hive-site.xml \
+--jars /usr/hdp/current/spark-client/lib/datanucleus-api-jdo-3.2.6.jar,/usr/hdp/current/spark-client/lib/datanucleus-rdbms-3.2.9.jar,/usr/hdp/current/spark-client/lib/datanucleus-core-3.2.10.jar /root/rk/SparkHiveIntegration.jar
+
+
+==================================================================
+Check log for display the output
+==================================================================
+yarn logs -applicationId <Application_id> > destination
+
+yarn logs -applicationId application_1505670883583_0003 > /tmp/hive_rk.txt
+
+
+
+==================================================================
+Remove duplicate data from the hive table
+==================================================================
+Insert into intoemployees values (20,'Michael','Ceo','1982-02-23',100000,'A')
+
+13,BB,CEO,2017-09-17,40000,A
+14,CC,CEO,2017-09-17,45000,A
+15,DD,CEO,2017-09-17,100000,B
+16,EE,CEO,2017-09-17,40000,B
+
+LOAD DATA LOCAL INPATH '/root/rk/employees_update.txt' INTO TABLE employees;
+
+hadoop fs -put employees_update.txt /root/rk/hive/
