@@ -1,0 +1,69 @@
+--------------------------------------------
+JOB automation in hadoop
+--------------------------------------------
+Execution of the sprk program on Cloudera
+====================
+
+spark-submit \
+--class hive.SparkHiveIntegration  \
+--num-executors 2 \
+--executor-cores 2 \
+--executor-memory 1g \
+--driver-memory 1g \
+--driver-cores 1 \
+--master yarn-cluster \
+--name "Hortonworks Box Hive-Spark-Integration" \
+--files /etc/hive/conf/hive-site.xml \
+ /root/rk/hive.jar
+
+===========================
+workflow.xml for scheduling
+===========================
+<workflow-app xmlns='uri:oozie:workflow:0.3' name='Spark-Hive-Shell-WF'>
+    <start to='shell1' />
+    <action name='shell1'>
+        <shell xmlns="uri:oozie:shell-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                  <name>mapred.job.queue.name</name>
+                  <value>${queueName}</value>
+                </property>
+            </configuration>
+            <exec>${EXEC}</exec>
+            <file>${EXEC}</file>
+        </shell>
+        <ok to="end" />
+        <error to="fail" />
+    </action>
+
+    <kill name="fail">
+        <message>Script failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name='end' />
+</workflow-app>
+
+
+
+create the folder 
+hadoop fs -mkdir -p /user/cloudera/test_oozie/spark_oozie 
+put the workflow.xml in that
+hadoop fs -put workflow.xml /user/cloudera/test_oozie/spark_oozie/
+
+hadoop fs -cat /user/cloudera/test_oozie/spark_oozie/workflow.xml
+
+to create send file that have spark submit command
+hadoop fs -put executeHiveSpark.sh /user/cloudera/test_oozie/spark_oozie/
+
+----------------------------------
+Execute Oozie
+----------------------------------
+oozie job -oozie http://localhost:11000/oozie -config /root/rk/SparkOzee.properties -run
+
+----------------------------------
+Check job status
+----------------------------------
+oozie job -oozie http://localhost:11000/oozie -info 0000013-171008040051549-oozie-oozi-C
+
+
